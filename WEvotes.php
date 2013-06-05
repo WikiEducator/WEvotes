@@ -60,6 +60,12 @@ class APIWEvotes extends ApiQueryBase {
 			$this->dieUsage('vid argument not supplied',
 				'missingvid');
 		}
+		$vid = preg_replace('/[^-_.a-z0-9]/i', '', $params['vid']);
+		if (($vid <> $params['vid']) || (strlen($vid) == 0)) {
+			$this->dieUsage('invalid vid argument',
+				'invalidvid');
+		}
+
 		if (!isset($params['vote'])) {
 			$this->dieUsage('vote argument not supplied',
 				'missingvote');
@@ -80,7 +86,6 @@ class APIWEvotes extends ApiQueryBase {
 		$sag->login($wgWEvotesUser, $wgWEvotesPasswd);
 		# see if the user has already voted on this item
 		$pid = intval($params['pid']);
-		$vid = intval($params['vid']);
 		$user = $wgUser->getName();
 		$url = "/_design/vote/_view/voted?key=" . rawurlencode("[$pid,$vid,\"$user\"]") . "&include_docs=true";
 		$this->dlog("url: $url\n");

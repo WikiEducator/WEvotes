@@ -7,6 +7,9 @@
 * @licence GPL2
 */
 
+define('DEBUG_WEVOTES', false);
+define('DEBUG_WEVOTES_FILE', '/tmp/vote.log');
+
 if( !defined( 'MEDIAWIKI' ) ) {
 	die( "This file is an extension to the MediaWiki software and cannot be used standalone.\n" );
 }
@@ -27,6 +30,12 @@ $wgAPIModules['wevotes'] = 'APIWEvotes';
 class APIWEvotes extends ApiQueryBase {
 	public function __construct( $query, $moduleName ) {
 		parent :: __construct( $query, $moduleName, 'vo' );
+	}
+
+	function dlog($s) {
+		if (DEBUG_WEVOTES) {
+			error_log($s, 3, DEBUG_WEVOTES_FILE);
+		}
 	}
 
 	public function execute() {
@@ -74,23 +83,23 @@ class APIWEvotes extends ApiQueryBase {
 		$vid = intval($params['vid']);
 		$user = $wgUser->getName();
 		$url = "/_design/vote/_view/voted?key=" . rawurlencode("[$pid,$vid,\"$user\"]") . "&include_docs=true";
-		error_log("url: $url\n", 3, '/tmp/vote.log');
+		$this->dlog("url: $url\n");
 		$v = $sag->get($url)->body;
-		error_log("fetched:\n", 3, '/tmp/vote.log');
-		error_log(print_r($v, true), 3, '/tmp/vote.log');
+		$this->dlog("fetched:\n");
+		$this->dlog(print_r($v, true));
 		if (count($v->rows) > 0) {
 			$vote = $v->rows[0];
-			error_log("old vote:\n", 3, '/tmp/vote.log');
-			error_log(print_r($vote, true), 3, '/tmp/vote.log');
+			$this->dlog("old vote:\n");
+			$this->dlog(print_r($vote, true));
 			$data = $vote->doc;
-			error_log("data\n", 3, '/tmp/vote.log');
-			error_log(print_r($data, true), 3, '/tmp/vote.log');
+			$this->dlog("data\n");
+			$this->dlog(print_r($data, true));
 			$data->vote = intval($params['vote']);
 			$data->timestamp = $tstamp;
 			$data->page = intval($params['page']);
 			$id = $data->_id;
-			error_log("new vote for $id\n", 3, '/tmp/vote.log');
-			error_log(print_r($data, true), 3, '/tmp/vote.log');
+			$this->dlog("new vote for $id\n");
+			$this->dlog(print_r($data, true));
 			$sag->put($id, $data);
 		} else {
 			# it is a new vote

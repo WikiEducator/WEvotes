@@ -19,7 +19,7 @@ require_once('sag/src/Sag.php');
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'WEvotes',
-	'version'        => '0.1',
+	'version'        => '0.1.2',
 	'url'            => 'http://WikiEducator.org/Extension:WEvotes',
 	'author'         => '[http://WikiEducator.org/User:JimTittsler Jim Tittsler]',
         'description'    => 'add API calls for voting on items in a page',
@@ -57,7 +57,7 @@ class APIWEvotes extends ApiQueryBase {
 				'missingpid');
 		}
 		$pid = preg_replace('/[^-_.a-z0-9]/i', '', $params['pid']);
-		if (($vid <> $params['pid']) || (strlen($pid) == 0)) {
+		if (($pid <> $params['pid']) || (strlen($pid) == 0)) {
 			$this->dieUsage('invalid pid argument',
 				'invalidpid');
 		}

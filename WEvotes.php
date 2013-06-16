@@ -7,7 +7,7 @@
 * @licence GPL2
 */
 
-define('DEBUG_WEVOTES', true);
+define('DEBUG_WEVOTES', false);
 define('DEBUG_WEVOTES_FILE', '/tmp/vote.log');
 
 if( !defined( 'MEDIAWIKI' ) ) {
@@ -19,7 +19,7 @@ require_once('sag/src/Sag.php');
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'WEvotes',
-	'version'        => '0.1.2',
+	'version'        => '0.2.0',
 	'url'            => 'http://WikiEducator.org/Extension:WEvotes',
 	'author'         => '[http://WikiEducator.org/User:JimTittsler Jim Tittsler]',
         'description'    => 'add API calls for voting on items in a page',
@@ -91,7 +91,9 @@ class APIWEvotes extends ApiQueryBase {
 		$sag->login($wgWEvotesUser, $wgWEvotesPasswd);
 		# see if the user has already voted on this item
 		$user = $wgUser->getName();
-		$url = "/_design/vote/_view/voted?key=" . rawurlencode("[$pid,$vid,\"$user\"]") . "&include_docs=true";
+		$url = "/_design/vote/_view/voted?key="
+			. rawurlencode("[\"$pid\",\"$vid\",\"$user\"]")
+		       	. "&include_docs=true";
 		$this->dlog("url: $url\n");
 		$v = $sag->get($url)->body;
 		$this->dlog("fetched:\n");
@@ -113,8 +115,8 @@ class APIWEvotes extends ApiQueryBase {
 		} else {
 			# it is a new vote
 			$data = array(
-				'pid' => intval($params['pid']),
-				'vid' => intval($params['vid']),
+				'pid' => $pid,
+				'vid' => $vid,
 				'vote' => intval($params['vote']),
 				'page' => intval($params['page']),
 				'user' => $wgUser->getName(),

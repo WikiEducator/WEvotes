@@ -7,7 +7,7 @@
 * @licence GPL2
 */
 
-define('DEBUG_WEVOTES', false);
+define('DEBUG_WEVOTES', true);
 define('DEBUG_WEVOTES_FILE', '/tmp/vote.log');
 
 if( !defined( 'MEDIAWIKI' ) ) {
@@ -56,6 +56,11 @@ class APIWEvotes extends ApiQueryBase {
 			$this->dieUsage('pid argument not supplied',
 				'missingpid');
 		}
+		$pid = preg_replace('/[^-_.a-z0-9]/i', '', $params['pid']);
+		if (($vid <> $params['pid']) || (strlen($pid) == 0)) {
+			$this->dieUsage('invalid pid argument',
+				'invalidpid');
+		}
 		if (!isset($params['vid'])) {
 			$this->dieUsage('vid argument not supplied',
 				'missingvid');
@@ -85,7 +90,6 @@ class APIWEvotes extends ApiQueryBase {
 		$sag->setDatabase($wgWEvotesDB);
 		$sag->login($wgWEvotesUser, $wgWEvotesPasswd);
 		# see if the user has already voted on this item
-		$pid = intval($params['pid']);
 		$user = $wgUser->getName();
 		$url = "/_design/vote/_view/voted?key=" . rawurlencode("[$pid,$vid,\"$user\"]") . "&include_docs=true";
 		$this->dlog("url: $url\n");

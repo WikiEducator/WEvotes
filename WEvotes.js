@@ -88,6 +88,14 @@ $(function () {
           //console.log(vid, d.rows[i].value);
           $('div#wevi_' + vid + '>.wevotes').text(d.rows[i].value);
         }
+        // if there are totals fields, calculate them
+        $('span.WEvotesTotal').each(function() {
+          var sum = 0;
+          $(this).closest('li').find('div.wevotes').each(function() {
+            sum += parseInt($(this).text(), 10);
+          });
+          $(this).text(sum);
+        });
       }
     });
   }

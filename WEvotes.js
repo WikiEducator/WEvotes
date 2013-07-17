@@ -73,8 +73,8 @@ $(function () {
   function updateTotals(pid) {
     $.ajax({
       url: couchVoteTotals + makeCouchqs({
-            startkey: "["+pid+"]",
-            endkey: "["+pid+", {}]",
+            startkey: '["'+pid+'"]',
+            endkey: '["'+pid+'", {}]',
             group_level: 2
           }),
       cache: false,
@@ -130,7 +130,7 @@ $(function () {
   function myVotes(pid) {
     $.ajax({
       url: couchMyVotes + makeCouchqs({
-        key: "[" + pid + ',"' + wgUserName + '"]'
+        key: '["' + pid + '","' + wgUserName + '"]'
         }),
       cache: false,
       dataType: 'jsonp',

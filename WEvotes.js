@@ -92,7 +92,11 @@ $(function () {
         $('span.WEvotesTotal').each(function() {
           var sum = 0;
           $(this).closest('li').find('div.wevotes').each(function() {
-            sum += parseInt($(this).text(), 10);
+            var v;
+            v = $.trim($(this).text());
+            if (v.length) {
+              sum += parseInt(v, 10);
+            }
           });
           $(this).text(sum);
         });

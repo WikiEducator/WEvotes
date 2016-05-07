@@ -19,7 +19,7 @@ require_once('sag/src/Sag.php');
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'WEvotes',
-	'version'        => '0.2.0',
+	'version'        => '1.0.0',
 	'url'            => 'http://WikiEducator.org/Extension:WEvotes',
 	'author'         => '[http://WikiEducator.org/User:JimTittsler Jim Tittsler]',
         'description'    => 'add API calls for voting on items in a page',

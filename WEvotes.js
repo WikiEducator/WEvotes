@@ -16,7 +16,7 @@ if ( ! window.console ) {
 
 $(function () {
   // scheme, host:port
-  var couchHost = 'http://wikieducator.iriscouch.com/',
+  var couchHost = 'http://v.oerfoundation.org:5984/',
       couchDB = 'votes',
       couchVoteTotals = couchHost + couchDB + '/_design/vote/_view/totals?',
       couchMyVotes = couchHost + couchDB + '/_design/vote/_view/myvotes?',

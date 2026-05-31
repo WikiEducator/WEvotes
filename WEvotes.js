@@ -1,53 +1,38 @@
-$(function () {
-    var weAPI = "/api.php";
+(function (mw, $) {
+    var api = new mw.Api();
 
     function notLoggedIn() {
-        if (wgUserName) {
+        if (mw.config.get("wgUserName")) {
             return false;
         }
         alert("You must be logged in to vote.");
         return true;
     }
 
-    function API(data, success, failure) {
-        data.action || (data.action = "query");
-        data.format || (data.format = "json");
-        $.ajax({
-            url: window.wgServer + weAPI,
-            type: "POST",
-            data: data,
-            success: success,
-            error: failure,
-        });
-    }
-
     function doVote(pid, vid, vote) {
-        API(
-            {
-                action: "wevotes",
-                vopid: pid,
-                vovid: vid,
-                vovote: vote,
-                vopage: wgArticleId,
-                vomode: "vote",
-            },
-            function () {
+        api.postWithEditToken({
+            action: "wevotes",
+            vopid: pid,
+            vovid: vid,
+            vovote: vote,
+            vopage: mw.config.get("wgArticleId"),
+            vomode: "vote",
+        })
+            .done(function () {
                 loadVotes(pid);
-            },
-            function () {
+            })
+            .fail(function () {
                 alert("Unable to capture your vote.\nPlease try later.");
-            },
-        );
+            });
     }
 
     function loadVotes(pid) {
-        API(
-            {
-                action: "wevotes",
-                vopid: pid,
-                vomode: "get",
-            },
-            function (d) {
+        api.post({
+            action: "wevotes",
+            vopid: pid,
+            vomode: "get",
+        })
+            .done(function (d) {
                 if (d && d.wevotes) {
                     var res = d.wevotes;
 
@@ -86,11 +71,7 @@ $(function () {
                         });
                     }
                 }
-            },
-            function () {
-                // Handle loading error silently or fallback
-            },
-        );
+            });
     }
 
     function showVote(vid, vote) {
@@ -145,4 +126,4 @@ $(function () {
         doVote(1, vid, 1);
         return false;
     });
-});
+})(mediaWiki, jQuery);

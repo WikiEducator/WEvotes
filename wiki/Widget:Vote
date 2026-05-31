@@ -1,0 +1,24 @@
+<noinclude>A widget that allows collecting votes for scenario planning.
+
+It is intended for use on a page with an ordered list of [[Template:VoteItem]].
+
+This started as a widget, but has become more of a custom tag thanks to the ResourceLoader.
+
+== Example ==
+
+{{#widget:Vote}}
+
+<ol id="weUncertainties" style="list-style-type: none">
+<li>{{VoteItem|id=1|text=A Hard Day's Night}}
+<ol style="list-style-type: none; margin-left: 8em;">
+<li>{{VoteItem|id=101|text='''YES''' This is awesome. Bacon ipsum dolor sit amet capicola tail cow pork chop. T-bone leberkas beef ribs, chuck short loin turkey venison ground round. Ground round ribeye pancetta brisket sirloin hamburger spare ribs bacon capicola doner swine. Drumstick ribeye bacon turducken. Ham kielbasa jerky, shoulder tail venison turducken short loin filet mignon prosciutto hamburger ham hock meatloaf brisket corned beef.}}</li>
+<li>{{VoteItem|id=102|text='''NO''' This is bogus}}</li>
+</ol></li>
+<li>{{VoteItem|id=2|text=Hey Jude}}</li>
+<li>{{VoteItem|id=3|text=Yesterday}}</li>
+<li>{{VoteItem|id=4|text=Lucy in the Sky with Diamonds}}</li>
+<li>{{VoteItem|id=5|text=Sgt. Pepper's Lonely Hearts Club Band}}</li>
+</ol>
+
+
+</noinclude><includeonly><!-- WEvotes.js is now loaded automatically via MediaWiki ResourceLoader --></includeonly>

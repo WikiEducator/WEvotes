@@ -25,6 +25,23 @@ $wgExtensionCredits['parserhook'][] = array(
 $wgAPIModules['wevotes'] = 'APIWEvotes';
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'WEvotesHooks::onLoadExtensionSchemaUpdates';
 
+$wgResourceModules['ext.WEvotes'] = array(
+	'scripts'       => array( 'WEvotes.js' ),
+	'dependencies'  => array( 'mediawiki.api', 'mediawiki.api.edit' ),
+	'localBasePath' => __DIR__,
+	'remoteExtPath' => 'WEvotes',
+);
+
+$wgHooks['ParserAfterTidy'][] = 'fnWEvotesParserAfterTidy';
+
+function fnWEvotesParserAfterTidy( &$parser, &$text ) {
+	if ( strpos( $text, 'wevote' ) === false ) {
+		return true;
+	}
+	$parser->getOutput()->addModules( 'ext.WEvotes' );
+	return true;
+}
+
 class WEvotesHooks {
 	/**
 	 * Register WEvotes database schema updates.
